@@ -68,8 +68,11 @@ export class SoundManager {
     ) {
       console.log("Node Not Loaded");
     } else {
-      this.convolverNone.gain.setValueAtTime(1, this.audioCtx.currentTime);
+      this.convolverNone.gain.setValueAtTime(1., this.audioCtx.currentTime);
       this.masterGain.gain.setValueAtTime(1, this.audioCtx.currentTime);
+      this.fadeGainSmall.gain.setValueAtTime(0,this.audioCtx.currentTime)
+      this.fadeGainMedium.gain.setValueAtTime(0,this.audioCtx.currentTime)
+      this.fadeGainLarge.gain.setValueAtTime(0,this.audioCtx.currentTime)
 
       this.masterGain.connect(this.convolverSmall);
       this.masterGain.connect(this.convolverMedium);
@@ -95,7 +98,7 @@ export class SoundManager {
     }
   }
   switchConvolver(){
-    if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
+    if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone||!this.audioCtx){
       return
     }else{
     if(this.switchCoolDown===false){
@@ -109,57 +112,65 @@ export class SoundManager {
         }
 
         if(this.convovlerActivated===0){
-          for(let i =0;i<50;i++){
-            setTimeout(()=>{
-              if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
-                return
-              }else{
-              this.fadeGainLarge.gain.value=1-i*0.02
-              this.convolverNone.gain.value=i*0.02
-            }
-            },i*0.02)
-          }
+          console.log("No Convolver Activating")
+          this.fadeGainLarge.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 2)
+          this.convolverNone.gain.exponentialRampToValueAtTime(1.0, this.audioCtx.currentTime + 2)
         }
         if(this.convovlerActivated===1){
-          for(let i =0;i<50;i++){
-            setTimeout(()=>{
-              if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
-                return
-              }else{
-              this.convolverNone.gain.value=1-i*0.02
-              this.fadeGainSmall.gain.value=i*0.02
-            }
-            },i*0.02)
-          }
+          console.log("Small Convolver Activating")
+          this.convolverNone.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 2)
+          this.fadeGainSmall.gain.exponentialRampToValueAtTime(1.0, this.audioCtx.currentTime + 2)
         }
         if(this.convovlerActivated===2){
-          for(let i =0;i<50;i++){
-            setTimeout(()=>{
-              if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
-                return
-              }else{
-              this.fadeGainSmall.gain.value=1-i*0.02
-              this.fadeGainMedium.gain.value=i*0.02
-            }
-            },i*0.02)
-          }
+          console.log("Medium Convolver Activating")
+          this.fadeGainSmall.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 2)
+          this.fadeGainMedium.gain.exponentialRampToValueAtTime(1.0, this.audioCtx.currentTime + 2)
         }
         if(this.convovlerActivated===3){
-          for(let i =0;i<50;i++){
-            setTimeout(()=>{
-              if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
-                return
-              }else{
-              this.fadeGainMedium.gain.value=1-i*0.02
-              this.fadeGainLarge.gain.value=i*0.02
-            }
-            },i*0.02)
-          }
-        }
+          console.log("Large Convolver Activating")
+          this.fadeGainMedium.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 2)
+          this.fadeGainLarge.gain.exponentialRampToValueAtTime(1.0, this.audioCtx.currentTime + 2)
+    
+        // if(this.convovlerActivated===1){
+        //   for(let i =0;i<50;i++){
+        //     setTimeout(()=>{
+        //       if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
+        //         return
+        //       }else{
+        //       this.convolverNone.gain.value=1-i*0.02
+        //       this.fadeGainSmall.gain.value=i*0.02
+        //     }
+        //     },i*0.02)
+        //   }
+        // }
+        // if(this.convovlerActivated===2){
+        //   for(let i =0;i<50;i++){
+        //     setTimeout(()=>{
+        //       if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
+        //         return
+        //       }else{
+        //       this.fadeGainSmall.gain.value=1-i*0.02
+        //       this.fadeGainMedium.gain.value=i*0.02
+        //     }
+        //     },i*0.02)
+        //   }
+        // }
+        // if(this.convovlerActivated===3){
+        //   for(let i =0;i<50;i++){
+        //     setTimeout(()=>{
+        //       if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
+        //         return
+        //       }else{
+        //       this.fadeGainMedium.gain.value=1-i*0.02
+        //       this.fadeGainLarge.gain.value=i*0.02
+        //     }
+        //     },i*0.02)
+        //   }
+        // }
 
     }
   }
-  }
+  }}
 
   async setUpConvolvers() {
     if (

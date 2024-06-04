@@ -2,15 +2,15 @@
 
 export const needle_exported_files = new Array();
 globalThis["needle:codegen_files"] = needle_exported_files;
-needle_exported_files.push("assets/4_23testScene.glb?v=1717481465958");
+needle_exported_files.push("assets/4_23testScene.glb?v=1717503816160");
 document.addEventListener("DOMContentLoaded", () =>
 {
 	const needleEngine = document.querySelector("needle-engine");
 	if(needleEngine && needleEngine.getAttribute("src") === null)
 	{
-		needleEngine.setAttribute("hash", "1717481465958");
+		needleEngine.setAttribute("hash", "1717503816160");
 		needleEngine.setAttribute("src", JSON.stringify(needle_exported_files));
 	}
 });
 
-console.log("Made\ with\ ♥\ by\ 🌵\ Needle\ -\ https://needle\.tools\ —\ Version\ 3\.37\.4-exp");
+console.log("Made\ with\ ♥\ by\ 🌵\ Needle\ -\ https://needle\.tools\ —\ Version\ 3\.39\.0-exp\.2");

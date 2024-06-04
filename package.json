@@ -9,17 +9,18 @@
     "gltf:transform": "npm run transform --prefix node_modules/@needle-tools/gltf-build-pipeline"
   },
   "dependencies": {
-    "@needle-tools/engine": "^3.37.4-alpha",
+    "@needle-tools/engine": "^3.39.0-alpha.2",
     "@tensorflow-models/handpose": "^0.1.0",
     "@tensorflow/tfjs": "^4.19.0",
-    "three": "npm:@needle-tools/three@^0.162.2"
+    "sharp": "^0.33.4",
+    "three": "npm:@needle-tools/three@^0.162.3"
   },
   "devDependencies": {
-	  "@needle-tools/helper": "^1.8.0",
-	  "@types/three": "0.162.0",
-	  "@vitejs/plugin-basic-ssl": "^1.0.1",
-	  "typescript": "^5.0.4",
-	  "vite": "<= 4.3.9",
-	  "vite-plugin-compression": "^0.5.1"
-	}
+    "@needle-tools/helper": "^1.9.0",
+    "@types/three": "0.162.0",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "typescript": "^5.0.4",
+    "vite": "<= 4.3.9",
+    "vite-plugin-compression": "^0.5.1"
+  }
 }
