@@ -34,7 +34,7 @@ div#root {
 #content{
     display:none;
 }
-#button1{
+#ConvolverSwitchButton{
     position: absolute;
     z-index: 100000;
 }

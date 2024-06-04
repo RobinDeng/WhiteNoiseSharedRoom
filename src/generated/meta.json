@@ -1,0 +1,19 @@
+{
+  "gzip": true,
+  "generator": "Unity 2022.3.14f1c1, Needle Engine Integration @3.37.4-exp",
+  "developmentBuild": true,
+  "allowHotReload": true,
+  "facebookInstantGames": null,
+  "license": null,
+  "useRapier": true,
+  "needleEditor": {
+    "enabled": true,
+    "components": true,
+    "materials": true,
+    "sceneCamera": false
+  },
+  "sceneName": "4_23test Scene",
+  "meta": null,
+  "absolutePath": "https://picturesque-gigantic-turtle.glitch.me",
+  "deployOnly": true
+}

@@ -19,6 +19,8 @@ export class SoundManager {
   convolverMedium: ConvolverNode | null = null;
   convolverLarge: ConvolverNode | null = null;
   convolverNone: GainNode | null = null;
+  convovlerActivated:number=0;
+  switchCoolDown:boolean=false;
 
   fadeGainSmall: GainNode | null = null;
   fadeGainMedium: GainNode | null = null;
@@ -49,6 +51,7 @@ export class SoundManager {
     this.convolverMedium = this.audioCtx.createConvolver();
     this.convolverLarge = this.audioCtx.createConvolver();
     this.convolverNone = this.audioCtx.createGain();
+    this.convovlerActivated = 0;
 
     this.fadeGainSmall = this.audioCtx.createGain();
     this.fadeGainMedium = this.audioCtx.createGain();
@@ -80,7 +83,82 @@ export class SoundManager {
       this.fadeGainLarge.connect(this.audioCtx.destination);
       this.convolverNone.connect(this.audioCtx.destination);
       console.log("======= Sound Manager Nodes Connected ======");
+      const myButton = document.getElementById('ConvolverSwitchButton');
+      if (myButton) {
+        // 添加点击事件监听器
+        myButton.addEventListener('click', () => {
+          this.switchConvolver()
+      });
+    } else {
+        console.error('Button element not found!');
     }
+    }
+  }
+  switchConvolver(){
+    if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
+      return
+    }else{
+    if(this.switchCoolDown===false){
+        this.switchCoolDown=true
+        setTimeout(()=>{
+          this.switchCoolDown=false
+        },1000)
+        this.convovlerActivated+=1
+        if(this.convovlerActivated>3){
+          this.convovlerActivated=0
+        }
+
+        if(this.convovlerActivated===0){
+          for(let i =0;i<50;i++){
+            setTimeout(()=>{
+              if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
+                return
+              }else{
+              this.fadeGainLarge.gain.value=1-i*0.02
+              this.convolverNone.gain.value=i*0.02
+            }
+            },i*0.02)
+          }
+        }
+        if(this.convovlerActivated===1){
+          for(let i =0;i<50;i++){
+            setTimeout(()=>{
+              if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
+                return
+              }else{
+              this.convolverNone.gain.value=1-i*0.02
+              this.fadeGainSmall.gain.value=i*0.02
+            }
+            },i*0.02)
+          }
+        }
+        if(this.convovlerActivated===2){
+          for(let i =0;i<50;i++){
+            setTimeout(()=>{
+              if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
+                return
+              }else{
+              this.fadeGainSmall.gain.value=1-i*0.02
+              this.fadeGainMedium.gain.value=i*0.02
+            }
+            },i*0.02)
+          }
+        }
+        if(this.convovlerActivated===3){
+          for(let i =0;i<50;i++){
+            setTimeout(()=>{
+              if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
+                return
+              }else{
+              this.fadeGainMedium.gain.value=1-i*0.02
+              this.fadeGainLarge.gain.value=i*0.02
+            }
+            },i*0.02)
+          }
+        }
+
+    }
+  }
   }
 
   async setUpConvolvers() {
