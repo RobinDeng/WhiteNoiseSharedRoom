@@ -1,3 +1,4 @@
+import { serializable } from "@needle-tools/engine";
 import { SoundBehaviour } from "./SoundBehaviour";
 
 export class SoundManager {
@@ -9,7 +10,10 @@ export class SoundManager {
     }
     return SoundManager.instance;
   }
-
+  @serializable(URL)
+  IRSmall:URL|null=null;
+  IRMedium:URL|null=null;
+  IRLarge:URL|null=null;
   // audioCtx = new AudioContext();
   audioCtx: AudioContext | null = null;
 
@@ -42,6 +46,7 @@ export class SoundManager {
   // this.fadeGainLarge= this.audioCtx.createGain();
 
   // }
+
   public createAudioCtx() {
     this.audioCtx = new AudioContext();
     // this.audioCtx = new AudioContext();
@@ -86,10 +91,11 @@ export class SoundManager {
       this.fadeGainLarge.connect(this.audioCtx.destination);
       this.convolverNone.connect(this.audioCtx.destination);
       console.log("======= Sound Manager Nodes Connected ======");
-      const myButton = document.getElementById('ConvolverSwitchButton');
-      if (myButton) {
+      const convolverButton = document.getElementById('ConvolverSwitchButton');
+      this.setUpConvolvers()
+      if (convolverButton) {
         // 添加点击事件监听器
-        myButton.addEventListener('click', () => {
+        convolverButton.addEventListener('click', () => {
           this.switchConvolver()
       });
     } else {
@@ -107,68 +113,10 @@ export class SoundManager {
           this.switchCoolDown=false
         },1000)
         this.convovlerActivated+=1
-        if(this.convovlerActivated>3){
-          this.convovlerActivated=0
-        }
-
-        if(this.convovlerActivated===0){
-          console.log("No Convolver Activating")
-          this.fadeGainLarge.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 2)
-          this.convolverNone.gain.exponentialRampToValueAtTime(1.0, this.audioCtx.currentTime + 2)
-        }
-        if(this.convovlerActivated===1){
-          console.log("Small Convolver Activating")
-          this.convolverNone.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 2)
-          this.fadeGainSmall.gain.exponentialRampToValueAtTime(1.0, this.audioCtx.currentTime + 2)
-        }
-        if(this.convovlerActivated===2){
-          console.log("Medium Convolver Activating")
-          this.fadeGainSmall.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 2)
-          this.fadeGainMedium.gain.exponentialRampToValueAtTime(1.0, this.audioCtx.currentTime + 2)
-        }
-        if(this.convovlerActivated===3){
-          console.log("Large Convolver Activating")
-          this.fadeGainMedium.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 2)
-          this.fadeGainLarge.gain.exponentialRampToValueAtTime(1.0, this.audioCtx.currentTime + 2)
-    
-        // if(this.convovlerActivated===1){
-        //   for(let i =0;i<50;i++){
-        //     setTimeout(()=>{
-        //       if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
-        //         return
-        //       }else{
-        //       this.convolverNone.gain.value=1-i*0.02
-        //       this.fadeGainSmall.gain.value=i*0.02
-        //     }
-        //     },i*0.02)
-        //   }
-        // }
-        // if(this.convovlerActivated===2){
-        //   for(let i =0;i<50;i++){
-        //     setTimeout(()=>{
-        //       if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
-        //         return
-        //       }else{
-        //       this.fadeGainSmall.gain.value=1-i*0.02
-        //       this.fadeGainMedium.gain.value=i*0.02
-        //     }
-        //     },i*0.02)
-        //   }
-        // }
-        // if(this.convovlerActivated===3){
-        //   for(let i =0;i<50;i++){
-        //     setTimeout(()=>{
-        //       if(!this.fadeGainSmall||!this.fadeGainMedium||!this.fadeGainLarge||!this.convolverNone){
-        //         return
-        //       }else{
-        //       this.fadeGainMedium.gain.value=1-i*0.02
-        //       this.fadeGainLarge.gain.value=i*0.02
-        //     }
-        //     },i*0.02)
-        //   }
-        // }
-
-    }
+        
+        const gainNodes:GainNode[]=[this.convolverNone,this.fadeGainSmall,this.fadeGainMedium,this.fadeGainLarge]
+        gainNodes[(this.convovlerActivated-1)%gainNodes.length].gain.exponentialRampToValueAtTime(0.01,this.audioCtx.currentTime+1)
+        gainNodes[this.convovlerActivated%gainNodes.length].gain.exponentialRampToValueAtTime(1,this.audioCtx.currentTime+1)
   }
   }}
 
@@ -180,10 +128,12 @@ export class SoundManager {
       !this.convolverLarge
     ) {
       console.log("Convolvers Not Yet Created");
-    } else {
-      const responseSmall = await fetch("../public/IRs/0_8s_small.mp3");
-      const responseMeidum = await fetch("../public/IRs/2_0s_medium.mp3");
-      const responseLarge = await fetch("../public/IRs/2_9s_large.wav");
+    // } else if(!this.IRSmall||!this.IRMedium||!this.IRLarge){
+    //   console.error("Unable to load IR Files")
+    }else{
+      const responseSmall = await fetch("../../assets/0_8s_small.mp3");
+      const responseMeidum = await fetch("../../assets/2_0s_medium.mp3");
+      const responseLarge = await fetch("../../assets/2_9s_large.wav");
 
       const arrayBuffer_convolverSmall = await responseSmall.arrayBuffer();
       const arrayBuffer_convolverMedium = await responseMeidum.arrayBuffer();

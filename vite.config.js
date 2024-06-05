@@ -20,7 +20,7 @@ export default defineConfig(async ({ command }) => {
                 'https://localhost:3000': 'https://localhost:3000'
             },
             strictPort: true,
-            port: 3000,
+            port: 3003,
         },
         build: {
             outDir: "./dist",
